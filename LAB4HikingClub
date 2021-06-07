@@ -27,26 +27,41 @@ public class JOP {
 
 package mod;
 
+/*
+ *The class Info is made in order to keep track of the different hikers and their
+ *individual trips.
+ */
 public class Info {
 
+	//Instance variable which establish the hiker's name, the location in which
+	//they'll hike, and the duration of the hike.
 	String name;
 	String location;
 	int duration;
 
+	//Constructor for the Info class which creates the object type Info with
+	//the values of the hiker name, their location, and the amount of time they
+	//take on the hike.
 	public Info(String hikeName, String hikeLocation, int hikeDuration) {
 		name = hikeName;
 		location = hikeLocation;
 		duration = hikeDuration;
 	}
 
+	//Getter method which retrieves the name of the hiker.
 	public String getName() { return name; }
 
+	//Getter method which retireves the location in which the hiker will go.
 	public String getLocation() { return location; }
 
+	//String method which prints out the amount of time that the hiker took on the trip.
 	public String getDuration() { return duration + ""; }
 
+	//Getter method which retireves the amount of time (in hours) that the hiker was out.
 	public int getTime() { return duration; }
 
+	//toString String method which returns a String containing all the information about
+	//a hiker's trip
 	public String toString() { return getName() + ", " + getLocation() + ", " + getDuration() + " "; }
 }
 
@@ -56,15 +71,26 @@ package mod;
 
 import java.util.ArrayList;
 
+/*
+ *The class List creates and manipulates the hikers list. It takes in user input in order
+ *to assign names as well as times and locations to the Info objects. The class also adds
+ *and removes ppl from the hikers list.
+ */
 public class List {
 
+	//Instance variables which create a list for the hikers and an int variable for
+	//the hike durations.
 	private ArrayList<Info> infoList;
 	private int hikeDur = 0;
 
+	//Constructor for the List class which initializes the ArrayList that will contain
+	//the info about the hikers.
 	public List() {
 		infoList = new ArrayList<Info>();
 	}
 
+	//Void method which adds hiker to the ArrayList of hikers by using the inputs of
+	//the user and then uses compareTo in order to sort the list of hikers alphabetically.
 	public void addHike(String hikeName, String hikeLocation, String hikeDuration) {
 		hikeDur = Integer.parseInt(hikeDuration);
 		if (this.infoList.size() == 0) {
@@ -83,6 +109,8 @@ public class List {
 		}
 	}
 
+	//Void method which uses the input of the user and .equals in order to removed
+	//a specified hiker form the list
 	public void removeHiker(String hikeName) {
 		for (int i = this.infoList.size() - 1; i >= 0; i--) {
 			if (hikeName.equalsIgnoreCase(this.infoList.get(i).getName())) {
@@ -91,6 +119,8 @@ public class List {
 		}
 	}
 
+	//String method which goes through the entire ArrayList of hikers and returns 
+	//the info ab all the hikers on the list.
 	public String listAll() {
 		String total = "";
 		for (int i = 0; i < this.infoList.size(); i++) {
@@ -99,6 +129,8 @@ public class List {
 		return total;
 	}
 
+	//String method which goes through the entire list and returns only the
+	//durations of all the hikes on the list.
 	public String totalDurationName(String hikeName) {
 		int total = 0;
 		for (int i = 0; i < this.infoList.size(); i++) {
@@ -109,6 +141,8 @@ public class List {
 		return "Total hours hiking: " + total + " hours";
 	}
 
+	//String method which returns a String with the total time that was spent
+	//hiking at a specified location.
 	public String totalDurationLocation(String hikeLocation) {
 		int total = 0;
 		for (int i = 0; i < this.infoList.size(); i++) {
@@ -143,12 +177,21 @@ package mod;
 
 import cont.JOP;
 
+/*
+ *The Tracker class manipulates and creates the ArrayList of the hikers based on the inputs of the user.
+ *It also explains to the user how the program will work and the options that they have when creating
+ *the list.
+ */
 public class Tracker {
 
+	//Instance variables that keep track of when the user is making changed and of the list that is
+	//being created.
 	private boolean _play = true;
 	private boolean isPlaying = true;
 	private List _l = new List();
 
+	//Constructor that creates the Tracker object which takes in the user input on order
+	//to proceed with the necessary code that the user wants to execute.
 	public Tracker() {
 		while (_play) {
 			isPlaying = true;
@@ -172,6 +215,10 @@ public class Tracker {
 		}
 	}
 
+	//Void method which allows for the user to view the list of hikers or manipulate
+	//the list by either adding or removing specific people. It uses .equals in order
+	//to determine what command to execute and then asks the user a set of questions
+	//in order to achieve the desired result.
 	private void ManageList() {
 		while(isPlaying){
 			boolean isRemoving = true;
@@ -238,6 +285,9 @@ public class Tracker {
 		}
 	}
 
+	//Void method method which allows for the user to view the list of hikers that were added to the
+	//list. It also gives the user the option to look at a specific hiker's info or a specific 
+	//location's info.
 	private void ViewStats() {
 		while(isPlaying) {
 			String viewChoice = JOP.in("This is the view section."
