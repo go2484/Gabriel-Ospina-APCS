@@ -1,1 +1,464 @@
-hi
+package cont;
+
+import javax.swing.JOptionPane;
+
+/*
+ *The JOptionPane class is made in order for the user to recieve and input commands
+ *into text boxes that appear on the computer screen. The class functions in order
+ to display messages and take in input from the user.
+ */
+public class JOP {
+
+  //Method made in order to display messages to the user.
+  //Does NOT take in input from the user.
+	public static void msg(String msg) {
+		JOptionPane.showMessageDialog(null, msg);
+	}
+	
+  //String method which displays a message to the user, as
+  //well as take in a String input from the user and later
+  //return it.
+	public static String in(String msg){
+		return JOptionPane.showInputDialog(msg);
+	}
+}
+
+-----------------------------------------------------------------------------------------------------------
+
+package mod;
+
+/*
+ *Main class made in order to execute the user's code
+ */
+public class Main {
+
+  //Void method which creates a new World type variable
+  //named obj.
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		World obj = new World();
+	}
+}
+
+-----------------------------------------------------------------------------------------------------------
+
+package mod;
+
+/*
+ *The Maze Class declares and initializes the maze build itself as well as the player 
+ *start, minataur start, sword position, and exit points.
+ */
+public class Maze {
+
+  /*
+   *Declare and initializes double boolean _curMaze variable which creates the layout
+   *of the maze which will be played. The true and false values will be used to create
+   *the maze walls and paths. The true values are the path which the minataur and the
+   *player can take.
+   */
+	private boolean [][] _curMaze =
+		{
+			{false,		false, 	true, 	false, 	false, 	false, 	false, 	false, 	false, 	false},
+			{false,		false, 	true, 	false, 	true, 	true, 	true, 	true, 	true, 	false},
+			{false,		false, 	true, 	true, 	true, 	false, 	true, 	false, 	true, 	false},
+			{false,		false, 	true, 	false, 	true, 	true, 	true, 	false, 	true, 	false},
+			{false,		false, 	true, 	false, 	false, 	false, 	false, 	true, 	true, 	true},
+			{true,		true, 	true, 	true, 	true, 	true, 	true, 	true, 	false, 	true},
+			{false,		false, 	true, 	false, 	false, 	false, 	false, 	true, 	false, 	true},
+			{false,		false, 	true, 	false, 	false, 	false, 	false, 	true, 	false, 	false},
+			{false,		false, 	true, 	true, 	true, 	true, 	true, 	true, 	false, 	false},
+			{false,		false, 	false, 	false, 	false, 	false, 	false, 	false, 	false, 	false}
+		};
+
+	//Declares and initializes 1D array named _plyStartLocations which establishes the 
+  //player start location in the map.
+	private int[] _plyStartLocations = {0,2};
+  //Declares and initializes 1D array named _minStartLocations which establishes the 
+  //minataur start location in the map.
+	private int[] _minStartLocations = {5,9};
+  //Declares and initializes 1D array named _exit which establishes the exit location
+  //for the player to escape through in the map.
+	private int[] _exit = {5,0};
+  //Declares and initializes 1D array named _sword which establishes the location of
+  //the sword on the map.
+	private int[] _sword = {1,6};
+	
+	//Declares and initializes 2D boolean array getter variable named getMaze which retrieves
+  //the maze layout for the game.
+	public boolean[][] getMaze() { return _curMaze; }
+  //Declares and initializes 1D array getter variable named getPlyStart which retirves the
+  //position in which the player starts.
+	public int[] getPlyStart() { return _plyStartLocations; }
+  //Declares and initializes 1D array getter variable named getMinStart which returns the
+  //start location of the minotaur in the map.
+	public int[] getMinStart() { return _minStartLocations; }
+  //Declares and initializes 1D array getter variable named getExit which returns the
+  //location of the exit on the map.
+	public int[] getExit() { return _exit; }
+  //Declares and initializes 1D array getter variable named getSword which returns the
+  //location of the sword on the map
+	public int[] getSword() { return _sword; }
+}
+
+-----------------------------------------------------------------------------------------------------------
+
+package mod;
+
+/*
+ *The class Minotaur declares and initializes all the important states of the minotaur, like
+ *whether it's alive or not and its starting location.
+ */
+public class Minotaur {
+
+  //Instance variables that declare the row, column, and state of the minotaur (if it's dead
+  //or alive).
+	private int _row, _col;
+	private boolean _isAlive;
+	
+  //Getter methods that return the row and column of the minotaur
+	public int getRow() { return _row; }
+	public int getCol() { return _col; }
+  //Void variable that sets the starting position for the minotaur
+	public void setPos(int r, int c) { _row = r; _col = c; }
+	
+  //Constructor which initializes the main values for the minotaur class
+	public Minotaur(int r, int c) {
+		_row = r;
+		_col = c;
+		_isAlive = true;
+	}
+	
+  //Setter methods which manipulate the value of the boolean variable _isAlive in order
+  //to determine whether the minotaur is still alive within the game
+	public boolean isAlive() { return _isAlive; }
+	public void kill() { _isAlive = false; }
+}
+
+-----------------------------------------------------------------------------------------------------------
+
+package mod;
+
+/*
+ *The class Player declares and initializes the main variable values for the player object,
+ *like the player's start postion and whether the player is dead or alive.
+ */
+public class Player {
+	
+  //Declares the instance varibles for the Player class, such as the row and column in which
+  //the player spawns and whether they are dead or alive and if they have a sword or not.
+	private int _row, _col;
+	private boolean _isAlive;
+	private boolean _sword;
+	
+  //Getter methods which return the row and column of the player's start position.
+	public int getRow() { return _row; }
+	public int getCol() { return _col; }
+  //Setter method which initializes the values of the _row and _col variables in order to
+  //establish the starting position of the player.
+	public void setPos(int r, int c) { _row = r; _col = c; }
+	
+  //Player class constuctor which creates the object player with the row and column values
+  //and the alive as well as has sword state.
+	public Player(int r, int c) {
+		_row = r;
+		_col = c;
+		_isAlive = true;
+		_sword = false;
+	}
+	
+  //Getter method which returns the state of whether the player is dead or alive.
+	public boolean isAlive() { return _isAlive; }
+  //Void method which manipulates the _isAlive boolean variable to change the player's 
+  //state so that he's dead.
+	public void kill() { _isAlive = false; }
+  //Getter method which returns the state of whether the player has a sword or not.
+	public boolean hasSword() { return _sword; }
+  //Void method that manipulates the boolean variable _sword to make it so that the
+  //player now has a sword.
+	public void giveSword() { _sword = true; }
+}
+
+-----------------------------------------------------------------------------------------------------------
+
+package mod;
+
+import cont.JOP;
+import view.StringMap;
+
+/*
+ *The World class builds and uses all of the variables created in the previous classes
+ *in order to build the entire world including the player, the minotaur, and the map
+ *itself. 
+ */
+public class World {
+
+	private Player _p;
+	private Minotaur _t;
+	private Maze _m;
+	private StringMap _s;
+	private Player _f;
+	private int _cnt = 0;
+	
+	public World() {
+		_m = new Maze();
+		// startROW startCOL
+		_p = new Player(_m.getPlyStart()[0], _m.getPlyStart()[1]);
+		_t = new Minotaur(_m.getMinStart()[0], _m.getMinStart()[1]);
+		_f = new Player(_m.getSword()[0], _m.getSword()[1]);
+		
+		_s = new StringMap(_m, _p, _t, _f);
+		update();
+	}
+
+	public void update() {
+		boolean isPlaying = true;
+		JOP.msg("How to play: You are \"P\", use the WASD keys to move in your desired direction"
+				+ "\n\"W\" moves you North, \n\"S\" moves you South, \n\"A\" moves you East, \n\"D\" moves you Right"
+				+ "\nTo move, type either \"W\", \"S\", \"A\", or \"D\" in the bottom bar");
+		JOP.msg("Reach the exit before the Minotaur, \"M\", catches you and you win! Simple as that."
+				+ "\nKeep in mind that within the maze there is a sword you can use to kill the minotaur."
+				+ "\nThis could come in handy to beat the maze!");
+		JOP.msg("You will recieve one of three randomly generated mazes."
+				+ "\nReach the exit, \"🚪\", and you win... get caught by the Minotaur, \"M\", and you DIE!"
+				+ "\ngoodluck ( ͡° ͜ʖ ͡°)"
+				+ "\nhave fun ¯\\_(ツ)_/¯"
+				+ "\nand heads up, if you accidentally type in more than one character or anything other than WASD your command will not work!");
+		
+		while (isPlaying) {
+			boolean on = true;
+			// Get the Map
+			String map = _s.generateMap();
+			String msg = "WASD to move. What direction do you want to move?";
+
+			while (on) {
+				// Get the player move
+				String move = JOP.in(map + msg);
+
+				// move the player
+				if(move == null) {
+
+				}
+				else if (getPlayerMove(move)) {
+					on = false;
+					addSteps();
+				}
+			}
+
+			// checks for sword
+			if(yieldsSword()) {
+				
+			}
+			
+			// checks for minotaur death
+			if(killMinotaur()) {
+				
+			}
+			
+			// check for victory
+			if (victory()) {
+				isPlaying = false;
+				JOP.msg("		                           Congrats victory!"
+						+ "\n              hope you enjoyed or whatever"
+						+ "\n                              ╭∩╮(･◡･)╭∩╮"
+						+ "\n(P.S. it took you " + stepCount() + " steps to complete the maze)");
+			}
+			// move the minotaur
+			moveMinotaur();
+			
+			// check for death
+			if(death()) {
+				isPlaying = false;
+				JOP.msg("        Wow what a loser. You suck. You lost."
+						+ "\n                         (ノಠ益ಠ)ノ彡┻━┻"
+						+ "\n(P.S. it took you " + stepCount() + " steps to complete the maze)");
+			}
+		}
+	
+		
+	}
+	
+	private void addSteps() { _cnt++; }
+	private int stepCount() { return _cnt; }
+
+	// change to getPlayerMove(String s) change to private.
+	private boolean getPlayerMove(String s) {
+
+		// Moving North
+		if (s.equalsIgnoreCase("W")) {
+			if ((_p.getRow() - 1) >= 0 && _m.getMaze()[_p.getRow() - 1][_p.getCol()]) {
+				_p.setPos(_p.getRow() - 1, _p.getCol());
+				return true;
+			} else {
+				return false;
+			}
+		}
+		// Moving South
+		if (s.equalsIgnoreCase("S")) {
+			if ((_p.getRow() + 1) < _m.getMaze().length && _m.getMaze()[_p.getRow() + 1][_p.getCol()]) {
+				_p.setPos(_p.getRow() + 1, _p.getCol());
+				return true;
+			} else {
+				return false;
+			}
+		}
+		// Moving East
+		if (s.equalsIgnoreCase("D")) {
+			if ((_p.getCol() + 1) < _m.getMaze()[0].length && _m.getMaze()[_p.getRow()][_p.getCol() + 1]) {
+				_p.setPos(_p.getRow(), _p.getCol() + 1);
+				return true;
+			} else {
+				return false;
+			}
+		}
+		// Moving West
+		if (s.equalsIgnoreCase("A")) {
+			if ((_p.getCol() - 1) >= 0 && _m.getMaze()[_p.getRow()][_p.getCol() - 1]) {
+				_p.setPos(_p.getRow(), _p.getCol() - 1);
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		return false;
+	}
+	
+	private void moveMinotaur() {
+		int rDist = _p.getRow() - _t.getRow();
+		int cDist = _p.getCol() - _t.getCol();
+		int r = _t.getRow();
+		int c = _t.getCol();
+		
+		if(!killMinotaur()) {
+			// Minotaur moving North
+			if(rDist < 0 && _m.getMaze()[r - 1][c]) {
+				_t.setPos(r - 1, c);
+			}
+	
+			// Minotaur moving South.
+			if(rDist > 0 && _m.getMaze()[r +1][c]) {
+				_t.setPos(r + 1, c);
+			}
+			// Minotaur moving East
+			if(cDist > 0 && _m.getMaze()[r][c + 1]) {
+				_t.setPos(r, c + 1);
+			}
+			// Minotuar moving west
+			if(cDist < 0 && _m.getMaze()[r][c - 1]) {
+				_t.setPos(r, c - 1);
+			}
+		}
+	}
+	
+	public boolean death() {
+		if(_t.getRow() == _p.getRow() && _t.getCol() == _p.getCol()) {
+			if(yieldsSword()) {
+				killMinotaur();
+				return false;
+			}
+			if(killMinotaur()) {
+				return false;
+			}
+		return true;
+		}
+		return false;
+	}
+
+	public boolean victory() {
+		if (_p.getRow() == _m.getExit()[0] && _p.getCol() == _m.getExit()[1])
+			return true;
+		return false;
+	}
+	
+	public boolean yieldsSword() {
+		boolean hasSword = false;
+		if(_f.getRow() == _p.getRow() && _f.getCol() == _p.getCol()) {
+			_p.giveSword();
+			hasSword = true;
+		}
+		return hasSword;
+	}
+	
+	public boolean killMinotaur() {
+		boolean mIsDead = false;
+		if(_t.getRow() == _p.getRow() && _t.getCol() == _p.getCol()) {
+			if(_p.hasSword()) {
+				_t.kill();
+				mIsDead = true;
+			}
+		}
+		return mIsDead;
+	}
+}
+
+-----------------------------------------------------------------------------------------------------------
+
+package view;
+
+import mod.Maze;
+import mod.Minotaur;
+import mod.Player;
+
+public class StringMap {
+
+
+	private final String _wall = "■";
+	private final String _path = "☐";
+	private final String _ply = " P";
+	private final String _min = "M";
+	private final String _exit = "🚪 ";
+	private final String _space = "     ";
+	private final String _sword = " S";
+	
+	private Maze _maze;
+	private Player _plyr;
+	private Minotaur _mint;
+	private Player _swor;
+	
+	public StringMap(Maze m, Player p, Minotaur t, Player s) {
+		_maze = m;
+		_plyr = p;
+		_mint = t;
+		_swor = s;
+	}
+	
+	public String generateMap() {
+		 String map = "";
+		 for(int r = 0; r < _maze.getMaze().length; r++) {
+			 for(int c = 0; c < _maze.getMaze()[0].length; c++) {
+				 if(_plyr.getRow() == r && _plyr.getCol() == c) {
+					 map += _ply + _space;
+				 }
+				 else if(_mint.getRow() == r && _mint.getCol() == c) {
+					 if(_mint.isAlive()) {
+						 map += _min + _space; 
+					 }
+					 else {
+						 map += _path + _space;
+					 }
+				 }
+				 else if(_swor.getRow() == r && _swor.getCol() == c) {
+					 if(_plyr.hasSword()) {
+						 map += _path + _space;
+					 }
+					 else{
+						 map += _sword + _space; 
+					 }
+				 }
+				 else if(_maze.getExit()[0] == r && _maze.getExit()[1] == c) {
+					 map += _exit + _space; 
+				 }
+				 else if(_maze.getMaze()[r][c]) {
+					 map += _path + _space;
+				 }
+				 else {
+					map += _wall + _space; 
+				 }
+			 }
+			 map += "\n";
+		 }
+		 map += "\n";
+	 
+		 return map;
+	}	
+}
