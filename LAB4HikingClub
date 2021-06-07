@@ -1,1 +1,272 @@
+package cont;
 
+import javax.swing.JOptionPane;
+
+/*
+ *The JOptionPane class is made in order for the user to recieve and input commands
+ *into text boxes that appear on the computer screen. The class functions in order
+ to display messages and take in input from the user.
+ */
+public class JOP {
+
+  //Method made in order to display messages to the user.
+  //Does NOT take in input from the user.
+	public static void msg(String msg) {
+		JOptionPane.showMessageDialog(null, msg);
+	}
+	
+  //String method which displays a message to the user, as
+  //well as take in a String input from the user and later
+  //return it.
+	public static String in(String msg){
+		return JOptionPane.showInputDialog(msg);
+	}
+}
+
+-----------------------------------------------------------------------------------------------------------
+
+package mod;
+
+public class Info {
+
+	String name;
+	String location;
+	int duration;
+
+	public Info(String hikeName, String hikeLocation, int hikeDuration) {
+		name = hikeName;
+		location = hikeLocation;
+		duration = hikeDuration;
+	}
+
+	public String getName() { return name; }
+
+	public String getLocation() { return location; }
+
+	public String getDuration() { return duration + ""; }
+
+	public int getTime() { return duration; }
+
+	public String toString() { return getName() + ", " + getLocation() + ", " + getDuration() + " "; }
+}
+
+-----------------------------------------------------------------------------------------------------------
+
+package mod;
+
+import java.util.ArrayList;
+
+public class List {
+
+	private ArrayList<Info> infoList;
+	private int hikeDur = 0;
+
+	public List() {
+		infoList = new ArrayList<Info>();
+	}
+
+	public void addHike(String hikeName, String hikeLocation, String hikeDuration) {
+		hikeDur = Integer.parseInt(hikeDuration);
+		if (this.infoList.size() == 0) {
+			this.infoList.add(new Info(hikeName, hikeLocation, hikeDur));
+		} else if (this.infoList.size() != 0) {
+			boolean unsorted = true;
+			for (int i = 0; i < this.infoList.size(); i++) {
+				if (hikeName.compareToIgnoreCase(this.infoList.get(i).getName()) <= 0 && unsorted) {
+					this.infoList.add(i, new Info(hikeName, hikeLocation, hikeDur));
+					unsorted = false;
+				}
+			}
+			if (unsorted) {
+				this.infoList.add(new Info(hikeName, hikeLocation, hikeDur));
+			}
+		}
+	}
+
+	public void removeHiker(String hikeName) {
+		for (int i = this.infoList.size() - 1; i >= 0; i--) {
+			if (hikeName.equalsIgnoreCase(this.infoList.get(i).getName())) {
+				infoList.remove(i);
+			}
+		}
+	}
+
+	public String listAll() {
+		String total = "";
+		for (int i = 0; i < this.infoList.size(); i++) {
+			total += "\n" + infoList.get(i).toString();
+		}
+		return total;
+	}
+
+	public String totalDurationName(String hikeName) {
+		int total = 0;
+		for (int i = 0; i < this.infoList.size(); i++) {
+			if (infoList.get(i).getName().equalsIgnoreCase(hikeName)) {
+				total += infoList.get(i).getTime();
+			}
+		}
+		return "Total hours hiking: " + total + " hours";
+	}
+
+	public String totalDurationLocation(String hikeLocation) {
+		int total = 0;
+		for (int i = 0; i < this.infoList.size(); i++) {
+			if (infoList.get(i).getLocation().equalsIgnoreCase(hikeLocation)) {
+				total += infoList.get(i).getTime();
+			}
+		}
+		return "Total hours hiking: " + total + " hours";
+	}
+}
+
+-----------------------------------------------------------------------------------------------------------
+
+package mod;
+
+/*
+ *Main class made in order to execute the user's code
+ */
+public class Main {
+
+  //Void method which creates a new Tracker type variable
+  //named obj.
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Tracker obj = new Tracker();
+	}
+}
+
+-----------------------------------------------------------------------------------------------------------
+
+package mod;
+
+import cont.JOP;
+
+public class Tracker {
+
+	private boolean _play = true;
+	private boolean isPlaying = true;
+	private List _l = new List();
+
+	public Tracker() {
+		while (_play) {
+			isPlaying = true;
+			
+			String start = JOP.in("Welcome to the home page! "
+					+ "\nTo continue please type either: \"Edit\", \"View\", or \"Exit\" into the bar below."
+					+ "\n\"Edit\" will allow you to either add or remove a person from your list of hikers."
+					+ "\n\"View\" will allow you look at you entire list of hikers in alphabetical order."
+					+ "\n\"Exit\" well this one doesn't really need an explation now does it..."
+					+ "\nP.S. You can also type exit whenever you want on the \"Edit\" or \"View\" "
+					+ "\nscreens if you wish to exit the program");
+			if (start.equalsIgnoreCase("edit")) {
+				ManageList();
+			} 
+			else if (start.equalsIgnoreCase("view")) {
+				ViewStats();
+			} 
+			else if (start.equalsIgnoreCase("exit")) {
+				System.exit(0);
+			}
+		}
+	}
+
+	private void ManageList() {
+		while(isPlaying){
+			boolean isRemoving = true;
+			boolean isManagingList = true;
+			String manageChoice = JOP.in("Here is where you will manage your list of hikers."
+					+ "\nType \"add\" to add a hiker into the list (this will include their name, lacation and time of their hike.)"
+					+ "\nType \"remove\" to remove a hiker from your list."
+					+ "\nType \"home\" if you wish to go back to the home screen"
+					+ "\nWhat would you like to do?"
+					+ "\n(Remember you could also exit whenever you want)");
+			if(manageChoice.equalsIgnoreCase("exit")) {
+				System.exit(0);
+			}
+			if(manageChoice.equalsIgnoreCase("home")) {
+				isPlaying = false;
+			}
+			if (manageChoice.equalsIgnoreCase("add")) {
+				while(isManagingList) {
+					String name = JOP.in("What is you hiker's name?");
+					while(name.equals("")) {
+						name = JOP.in("What is you hiker's name?");
+					}
+					String location = JOP.in("Where will the hike take place?");
+					while(location.equals("")) {
+						location = JOP.in("Where will the hike take place?");
+					}
+					String duration = JOP.in("In hours, how long will the hike be?");
+					while(duration.equals("")) {
+						duration = JOP.in("In hours, how long will the hike be?");
+					}
+					_l.addHike(name, location, duration);
+					String decision = JOP.in("Would you like to add someone else?"
+							+ "\nType \"yes\" or \"no\".");
+					while(!decision.equalsIgnoreCase("yes") && !decision.equalsIgnoreCase("no")) {
+						decision = JOP.in("Would you like to add someone else?"
+								+ "\nType \"yes\" or \"no\".");
+					}
+					if(decision.equalsIgnoreCase("yes")) {
+						isManagingList = true;
+					}
+					else if(decision.equalsIgnoreCase("no")) {
+						isManagingList = false;
+					}
+				}
+			} 
+			else if (manageChoice.equalsIgnoreCase("remove")) {
+				while(isRemoving) {
+					String name = JOP.in("Who would you like to remove?");
+					_l.removeHiker(name);
+					String choose = JOP.in("Would you like to remove more people?"
+							+ "\nType \"yes\" or \"no\"");
+					while(!choose.equalsIgnoreCase("yes") && !choose.equalsIgnoreCase("no")) {
+						choose = JOP.in("Would you like to remove more people?"
+								+ "\nType \"yes\" or \"no\"");
+						}
+					if(choose.equalsIgnoreCase("yes")) {
+						isRemoving = true;
+					}
+					else if(choose.equalsIgnoreCase("no")) {
+						isRemoving = false;
+					}
+				}
+			}
+		}
+	}
+
+	private void ViewStats() {
+		while(isPlaying) {
+			String viewChoice = JOP.in("This is the view section."
+					+ "\nType \"list\" to view the entire list of hikers."
+					+ "\nType \"duration\" to view the total amount of time for a specific name or location."
+					+ "\nType \"home\" if you wish to go back to the home screen"
+					+ "\nWhich would you like to view?");
+			if(viewChoice.equalsIgnoreCase("exit")) {
+				System.exit(0);
+			}
+			if(viewChoice.equalsIgnoreCase("home")) {
+				isPlaying = false;
+			}
+			if (viewChoice.equals("list")) {
+				JOP.msg("Name, Location, Time:"
+						+ _l.listAll());
+			} 
+			else if (viewChoice.equals("duration")) {
+				String durationChoice = JOP.in("Type \"name\" to view the total hiking duration of a specific person"
+						+ "\nType \"location\" to view the total hiking duration for a specific location");
+				if (durationChoice.equalsIgnoreCase("name")) {
+					String name = JOP.in("Which hiker would you like to view?");
+					JOP.msg(_l.totalDurationName(name));
+				} 
+				else if (durationChoice.equalsIgnoreCase("location")) {
+					String location = JOP.in("Which hike location would you like to view?");
+					JOP.msg(_l.totalDurationLocation(location));
+				}
+			}
+		}
+	}
+}
