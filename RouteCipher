@@ -29,12 +29,20 @@ package mod;
 
 import java.util.HashMap;
 
+/*
+ *The class cypher is made in order to encrypt and decrypt the messages inputted by the user
+ *by using hashmaps imported by the java util class.
+ */
 public class Cypher {
 
-	private static int cnt = 0;
+    //Instance variable declared and initialized in order to be used as a counter and
+    //as holders for the hashmap codes.
+    private static int cnt = 0;
     private static HashMap<String, String> numsToLetters  = generateNumsToLetters();
     private static HashMap<String, String> lettersToNums  = generateLetterstoNums();
 
+    //Constructor for the Cypher class which creates a Cypher object that will later
+    //represent the encrypted message that the user will receive.
     public Cypher() {
         for (int charNum = 0, indexNum = 0; charNum <= 127; charNum++, indexNum++) {
             numsToLetters.put("" + indexNum, Character.toString((char) charNum));
@@ -42,6 +50,8 @@ public class Cypher {
         }
     }
 
+    //String method which encrypts the inputted String from the user and turns it into
+    //an array of characters that will later be used on a hashmap so they could be encrypted.
     public static String encrypt(String message) {
         String tempMessage = "";
         cnt = 0;
@@ -53,6 +63,8 @@ public class Cypher {
         return tempMessage;
     }
 
+    //String array which returns the decrypted version of the encrypted. The method goes
+    //through the individual letter that are left on
     public static String decrypt(String message) {
         String[] arrayMessage = message.split(" ", 0);
         String tempMessage = "";
