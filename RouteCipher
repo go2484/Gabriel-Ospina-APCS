@@ -1,0 +1,216 @@
+package cont;
+
+import javax.swing.JOptionPane;
+
+/*
+ *The JOptionPane class is made in order for the user to recieve and input commands
+ *into text boxes that appear on the computer screen. The class functions in order
+ to display messages and take in input from the user.
+ */
+public class JOP {
+
+  //Method made in order to display messages to the user.
+  //Does NOT take in input from the user.
+	public static void msg(String msg) {
+		JOptionPane.showMessageDialog(null, msg);
+	}
+	
+  //String method which displays a message to the user, as
+  //well as take in a String input from the user and later
+  //return it.
+	public static String in(String msg){
+		return JOptionPane.showInputDialog(msg);
+	}
+}
+
+-----------------------------------------------------------------------------------------------------------
+
+package mod;
+
+import java.util.HashMap;
+
+public class Cypher {
+
+	private static int cnt = 0;
+    private static HashMap<String, String> numsToLetters  = generateNumsToLetters();
+    private static HashMap<String, String> lettersToNums  = generateLetterstoNums();
+
+    public Cypher() {
+        for (int charNum = 0, indexNum = 0; charNum <= 127; charNum++, indexNum++) {
+            numsToLetters.put("" + indexNum, Character.toString((char) charNum));
+            lettersToNums.put(Character.toString((char) charNum), "" + indexNum);
+        }
+    }
+
+    public static String encrypt(String message) {
+        String tempMessage = "";
+        cnt = 0;
+        char[] charArray = message.toCharArray();
+        for (char c : charArray) {
+            tempMessage += lettersToNums.get(Character.toString(c)) + " ";
+            cnt++;
+        }
+        return tempMessage;
+    }
+
+    public static String decrypt(String message) {
+        String[] arrayMessage = message.split(" ", 0);
+        String tempMessage = "";
+        for (String block : arrayMessage) {
+            tempMessage += numsToLetters.get(block);
+        }
+        return tempMessage;
+    }
+
+    public static HashMap<String, String> generateNumsToLetters() {
+        HashMap<String, String> numsToLetters  = new HashMap<String, String>();
+        for (int charNum = 0, indexNum = 0; charNum <= 127; charNum++, indexNum++) {
+            numsToLetters.put("" + indexNum, Character.toString((char) charNum));
+        }
+
+        return numsToLetters;
+    }
+
+    public static HashMap<String, String> generateLetterstoNums() {
+        HashMap<String, String> lettersToNums  = new HashMap<String, String>();
+        for (int charNum = 0, indexNum = 0; charNum <= 127; charNum++, indexNum++) {
+            lettersToNums.put(Character.toString((char) charNum), "" + indexNum);
+        }
+
+        return lettersToNums;
+    }
+    
+    public static String info(String message) {
+        int rows = (int) Math.sqrt(Math.sqrt(message.length()));
+        return "# of Rows: " + rows + "\n# of Cols: " + rows + "\nTotal Dimensions: " + rows * rows;
+    }
+    
+    public int getCnt() {
+    	return cnt;
+    }
+}
+
+-----------------------------------------------------------------------------------------------------------
+
+package mod;
+
+/*
+ *Main class made in order to execute the user's code
+ */
+public class Main {
+
+  //Void method which creates a new Program type variable
+  //named obj.
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Program obj = new Program();
+	}
+}
+
+-----------------------------------------------------------------------------------------------------------
+
+package mod;
+
+import cont.JOP;
+
+public class Program {
+
+	private Cypher _c = new Cypher();
+	private boolean running = true;
+	private String input = "";
+	private String storage1 = "";
+	private String storage2 = "";
+	private String storage3 = "";
+	private String storage4 = "";
+	private String storage5 = "";
+
+	public Program() {
+		while (running) {
+			input = JOP.in("Welcome to Route Cipher."
+					+ "\nIf you would like to encrypt a message please type \"encrypt\" into the bar below"
+					+ "\nIf you would like to decryot a previously encrtpted message please type \"decrypt\" into the bar below"
+					+ "\nTo exit just click the x or type \"exit\" to close the program"
+					+ "\n(You first have to encrypt a phrase in order to be able to decrypt anything)");
+			if (input.equalsIgnoreCase("exit")) {
+				System.exit(0);
+			}
+			if (input.equalsIgnoreCase("encrypt")) {
+				encrypt();
+			}
+			if (input.equalsIgnoreCase("decrypt")) {
+				decrypt();
+			}
+		}
+	}
+
+	public void encrypt() {
+		String choice = "";
+		String msg = "";
+		String emsg = "";
+		boolean run = true;
+		while (run) {
+			msg = JOP.in("Please type out the message you would wish to encrypt.");
+			if (!msg.equals("")) {
+				run = false;
+			}
+		}
+		emsg = _c.encrypt(msg);
+
+		run = true;
+		while (run) {
+			choice = JOP.in("In which storage file would you like to place your encrypted message?"
+					+ "\n(pick a file number from 1-5)");
+			if (choice.equals("1") || choice.equals("2") || choice.equals("3") || choice.equals("4")
+					|| choice.equals("5")) {
+				run = false;
+			}
+		}
+
+		if (choice.equals("1")) {
+			storage1 = emsg;
+		} else if (choice.equals("2")) {
+			storage2 = emsg;
+		} else if (choice.equals("3")) {
+			storage3 = emsg;
+		} else if (choice.equals("4")) {
+			storage4 = emsg;
+		} else if (choice.equals("5")) {
+			storage5 = emsg;
+		}
+
+		JOP.msg("Your LetterBlocks are composed of:" + "\n" + _c.info(emsg));
+		JOP.msg("it takes " + _c.getCnt() +" blocks to encrypt your phrase");
+		JOP.msg("Your encrypted code is:" + "\n" + emsg);
+
+	}
+
+	public void decrypt() {
+		String dmsg = "";
+		String code = "";
+		String file = "";
+		boolean run = true;
+		while (run) {
+			file = JOP.in("Which file would you like to decrypt?" + "\n(pick a file number from 1-5)");
+			if (file.equals("1") || file.equals("2") || file.equals("3") || file.equals("4")
+					|| file.equals("5")) {
+				run = false;
+			}
+		}
+
+		if (file.equals("1")) {
+			code = storage1;
+		} else if (file.equals("2")) {
+			code = storage2;
+		} else if (file.equals("3")) {
+			code = storage3;
+		} else if (file.equals("4")) {
+			code = storage4;
+		} else if (file.equals("5")) {
+			code = storage5;
+		}
+
+		dmsg = _c.decrypt(code);
+
+		JOP.msg("Your decrypted code is:" + "\n" + dmsg);
+	}
+}
