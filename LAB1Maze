@@ -188,10 +188,13 @@ import view.StringMap;
 /*
  *The World class builds and uses all of the variables created in the previous classes
  *in order to build the entire world including the player, the minotaur, and the map
- *itself. 
+ *itself. It also contains the basic functions like determining when the player or the
+ *minotaur is dead and whether or not the player has completed the maze.
  */
 public class World {
 
+	//Instance variables which declare all the main variables used in the program
+	//such as the maze layout, the play, and minotaur.
 	private Player _p;
 	private Minotaur _t;
 	private Maze _m;
@@ -199,6 +202,9 @@ public class World {
 	private Player _f;
 	private int _cnt = 0;
 	
+	//Constructor for the World class wich creates the World object with the values
+	//of the map layout, the player and minotaur locations, and the functions that
+	//the game will perform as it runs.
 	public World() {
 		_m = new Maze();
 		// startROW startCOL
@@ -210,6 +216,9 @@ public class World {
 		update();
 	}
 
+	//Void method which first delivers instructions to the user on how the game will
+	//work and then executes the code that is necessary for the game to work properly
+	//until the player has either been kille by the minotaur or has reached the exit.
 	public void update() {
 		boolean isPlaying = true;
 		JOP.msg("How to play: You are \"P\", use the WASD keys to move in your desired direction"
@@ -277,10 +286,16 @@ public class World {
 		
 	}
 	
+	//Void method that increments the int variable _cnt which keeps track of the
+	//amount of steps that a player has taken.
 	private void addSteps() { _cnt++; }
+	//Getter method that returns the number of steps that a player has taken.
 	private int stepCount() { return _cnt; }
 
-	// change to getPlayerMove(String s) change to private.
+	//Boolean method that determines whether or not that player can move based on
+	//the current position that he/she is in. The methos will take in a String
+	//inputted by the user and later use it to determine where and if the player
+	//can move.
 	private boolean getPlayerMove(String s) {
 
 		// Moving North
@@ -323,6 +338,9 @@ public class World {
 		return false;
 	}
 	
+	//Void method that will move the AI minotaur based on what position the player
+	//is currently. This method will cause for the minotaur to move closer and closer
+	//to the player by taking the shortest path.
 	private void moveMinotaur() {
 		int rDist = _p.getRow() - _t.getRow();
 		int cDist = _p.getCol() - _t.getCol();
@@ -350,6 +368,8 @@ public class World {
 		}
 	}
 	
+	//Boolean method which determines if the minotaur has reached the player, and
+	//then determines who dies by seeing whether or not the player has a sword.
 	public boolean death() {
 		if(_t.getRow() == _p.getRow() && _t.getCol() == _p.getCol()) {
 			if(yieldsSword()) {
@@ -364,12 +384,16 @@ public class World {
 		return false;
 	}
 
+	//Boolean method that checks if the player has reached the exit and returns
+	//true or false based on whether or not the player is on the exit.
 	public boolean victory() {
 		if (_p.getRow() == _m.getExit()[0] && _p.getCol() == _m.getExit()[1])
 			return true;
 		return false;
 	}
 	
+	//Boolean method which checks if the player has picked up the sword and then
+	//manipulates the hasSword variable to true if the player has picked up the sword.
 	public boolean yieldsSword() {
 		boolean hasSword = false;
 		if(_f.getRow() == _p.getRow() && _f.getCol() == _p.getCol()) {
@@ -379,6 +403,8 @@ public class World {
 		return hasSword;
 	}
 	
+	//Boolean method that checks whether or not the player has killed the minotaur
+	//using the sword. Returns true if the player does have the sword and false otherwise.
 	public boolean killMinotaur() {
 		boolean mIsDead = false;
 		if(_t.getRow() == _p.getRow() && _t.getCol() == _p.getCol()) {
@@ -399,9 +425,14 @@ import mod.Maze;
 import mod.Minotaur;
 import mod.Player;
 
+/*
+ *The StringMap class creates the layout of the map such as images that will
+ *appear where a wall is, where a path is, the symbol of the player, the symbol
+ *of the minotaur, and the symbol of the exit and sword
+ */
 public class StringMap {
 
-
+	//Instance variables that represent the images of the objects on the map.
 	private final String _wall = "■";
 	private final String _path = "☐";
 	private final String _ply = " P";
@@ -410,11 +441,15 @@ public class StringMap {
 	private final String _space = "     ";
 	private final String _sword = " S";
 	
+	//Instance variables that create objects for the maze, the player, the
+	//minotaur, and the sword.
 	private Maze _maze;
 	private Player _plyr;
 	private Minotaur _mint;
 	private Player _swor;
 	
+	//Constructor for the StringMap class that creates an object for the maze
+	//layout and the objects within it
 	public StringMap(Maze m, Player p, Minotaur t, Player s) {
 		_maze = m;
 		_plyr = p;
@@ -422,6 +457,9 @@ public class StringMap {
 		_swor = s;
 	}
 	
+	//String method that generates the map view using the symbols established
+	//in the instance variables and then places the player, next the minotaur,
+	//then the walls, then the exit, and then the path.
 	public String generateMap() {
 		 String map = "";
 		 for(int r = 0; r < _maze.getMaze().length; r++) {
