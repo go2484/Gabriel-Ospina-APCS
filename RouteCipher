@@ -63,8 +63,9 @@ public class Cypher {
         return tempMessage;
     }
 
-    //String array which returns the decrypted version of the encrypted. The method goes
-    //through the individual letter that are left on
+    //String array which returns the decrypted version of the encrypted message. The method
+    //goes through the individual letter that are left after the message has been translated
+    //back into letters and then puts them together in order to form the original phrase again.
     public static String decrypt(String message) {
         String[] arrayMessage = message.split(" ", 0);
         String tempMessage = "";
