@@ -75,6 +75,9 @@ public class Cypher {
         return tempMessage;
     }
 
+    //A hashmap type method which utilizes the hashmap functions from the java class and
+    //then uses it in order to decode the encrypted message and turn it back into letters.
+    //At the end it returns a String of all the letters in the encrypted message.
     public static HashMap<String, String> generateNumsToLetters() {
         HashMap<String, String> numsToLetters  = new HashMap<String, String>();
         for (int charNum = 0, indexNum = 0; charNum <= 127; charNum++, indexNum++) {
@@ -84,6 +87,9 @@ public class Cypher {
         return numsToLetters;
     }
 
+    //A hashmap type method that encrypts the inputted message of the user by using the
+    //hashmaps in order to convert the words of the original message into numbers, which
+    //would function as a hidden message.
     public static HashMap<String, String> generateLetterstoNums() {
         HashMap<String, String> lettersToNums  = new HashMap<String, String>();
         for (int charNum = 0, indexNum = 0; charNum <= 127; charNum++, indexNum++) {
@@ -93,11 +99,14 @@ public class Cypher {
         return lettersToNums;
     }
     
+    //String method toString which simply returns a String containing the number of rows
+    //and columns that will be used in order to encrypt the message.
     public static String info(String message) {
         int rows = (int) Math.sqrt(Math.sqrt(message.length()));
         return "# of Rows: " + rows + "\n# of Cols: " + rows + "\nTotal Dimensions: " + rows * rows;
     }
     
+    //Geter method that simply returns the value of the counter at any certain point in the code.
     public int getCnt() {
     	return cnt;
     }
@@ -126,8 +135,16 @@ package mod;
 
 import cont.JOP;
 
+/*
+ *The class Program introduces the user to the instuctions and uses of the encrypter and decrypter
+ *that he/she will be using. The class takes in the inputs fromt the user and then manipulates it
+ *depending on what the user wishes to do.
+ */
 public class Program {
 
+	//Instance variables which create acces to the Cypher class, a boolean which determines when
+	//to run each task, and variable to store the text inputs of the user, and storage spaces in
+	//to save previously encrypted texts.
 	private Cypher _c = new Cypher();
 	private boolean running = true;
 	private String input = "";
@@ -137,6 +154,9 @@ public class Program {
 	private String storage4 = "";
 	private String storage5 = "";
 
+	//Constructor for the Program class which commences the the code and explains what the user can do
+	//within the program. It gives them the option to either encrypt a new phrase or decrypt a previously
+	//made phrase.
 	public Program() {
 		while (running) {
 			input = JOP.in("Welcome to Route Cipher."
@@ -156,6 +176,12 @@ public class Program {
 		}
 	}
 
+	//Void method which manipulates the user's initial message in order to encrypt it into
+	//a secret message made up of numbers instead of letters. The method uses JOP in order
+	//to retreive the message from the user and then uses the cypher class and hashmap to
+	//transform the inputted phrase into a series of encrypted numbers. This portion of the
+	//program also give the user the option to save their encrypted message into any available
+	//save spot within the code.
 	public void encrypt() {
 		String choice = "";
 		String msg = "";
@@ -197,6 +223,10 @@ public class Program {
 
 	}
 
+	//Void methods which manipulates the encrypted message in order to turn it back into regular
+	//letters that are readable to the user. The method retrieves any specified encrypted message
+	//from the five available save spots and then uses the Cypher class and hashmaps to return the
+	//original phrase to the user.
 	public void decrypt() {
 		String dmsg = "";
 		String code = "";
