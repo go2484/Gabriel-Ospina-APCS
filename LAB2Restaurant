@@ -47,112 +47,28 @@ package mod;
 import java.util.ArrayList;
 import cont.JOP;
 
-public class MasterOrder {
-	private ArrayList<Order> _orders = new ArrayList<Order>();
-	private Menu _m;
-	
-	public MasterOrder() {
-		update();
-	}
-	
-	public void update() {
-		boolean isOrdering = true;
-		JOP.msg("Welcome to the Colombian Quisine! Home of all the finest dishes from Colombia!");
-		JOP.msg("We're ruuning a bit low on some supplies though so our menu looks a little... short"
-				+ "\n  but don't worry, I promise our menu still comes with our specialty dishes");
-		JOP.in("");
-		
-		while(isOrdering) {
-			boolean open = true;
-			String menu = _m.toString();
-			String msg = "What would you like to order?";
-			
-			while(open){				
-				String order = JOP.in(menu + msg);
-				
-				if(order == null) {
-					
-				}
-				else if(getOrder(order)) {
-					open = false;
-				}
-				
-			}
-		}
-	}
-	
-	private boolean getOrder(String s) {
-		
-		if(s.equalsIgnoreCase("bandeja paisa")) {
-			_orders.add(s);
-			return true;
-		}
-		else if(s.equalsIgnoreCase("sancocho")) {
-			_orders.add(s);
-			return true;
-		}
-		else if(s.equalsIgnoreCase("lechona")) {
-			_orders.add(s);
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-}
-
 /*
-private boolean getPlayerMove(String s) {
-
-	// Moving North
-	if (s.equalsIgnoreCase("W")) {
-		if ((_p.getRow() - 1) >= 0 && _m.getMaze()[_p.getRow() - 1][_p.getCol()]) {
-			_p.setPos(_p.getRow() - 1, _p.getCol());
-			return true;
-		} else {
-			return false;
-		}
-	}
-	// Moving South
-	if (s.equalsIgnoreCase("S")) {
-		if ((_p.getRow() + 1) < _m.getMaze().length && _m.getMaze()[_p.getRow() + 1][_p.getCol()]) {
-			_p.setPos(_p.getRow() + 1, _p.getCol());
-			return true;
-		} else {
-			return false;
-		}
-	}
-	// Moving East
-	if (s.equalsIgnoreCase("D")) {
-		if ((_p.getCol() + 1) < _m.getMaze()[0].length && _m.getMaze()[_p.getRow()][_p.getCol() + 1]) {
-			_p.setPos(_p.getRow(), _p.getCol() + 1);
-			return true;
-		} else {
-			return false;
-		}
-	}
-	// Moving West
-	if (s.equalsIgnoreCase("A")) {
-		if ((_p.getCol() - 1) >= 0 && _m.getMaze()[_p.getRow()][_p.getCol() - 1]) {
-			_p.setPos(_p.getRow(), _p.getCol() - 1);
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	return false;
-}
-
-
-
+ *The class MasterOrder takes in the input from the user in order to place or remove food orders from the
+ *user's check. The class introduces the user to the intructions of the program and later gives them the
+ *option to add, remove or view the different orders placed within the MasterOrder class.
+ */
 public class MasterOrder {
+
+    //Instance variables that create the ArrayList of orders that are made by the user, as well as a boolean
+    //variable that will determine when the program should run specific methods.
     private ArrayList<Order> orders;
     boolean running = true;
+    
+    //Constructor for the MasterOrder class which creates the object for the order list as well as intiates
+    //the main program that will execute all the commands for the instructions and methods.
     public MasterOrder() {
         orders = new ArrayList<Order>();
         this.update();
     }
+    
+    //Void update method that will display the instructions to the user using the JOP class that will cause
+    //panes to appear that will explain to the user what to do and give them the options that they have
+    //available to manipulate the order list.
     public void update(){
         while(running) {
             String usrInput = JOP.in("Welcome to the ordering program! \n Type order to start ordering \n Type print to print the orders \n Type remove to remove an order \n Type clear to clear parts of the order list \n Type total orders to display the number of each product being ordered \n Type quit to exit the program");
@@ -180,6 +96,8 @@ public class MasterOrder {
         }
     }
 
+    //Void method which will take in the inputted order from the user and then adds it to the orders ArrayList
+    //that was created at the beginning of the class.
     public void addOrder() {
         String p = JOP.in("Enter in the name of the product you want. Your options are: White chocolate, milk chocolate and dark chocolate.");
         if(!p.equalsIgnoreCase("milk chocolate") && !p.equalsIgnoreCase("dark chocolate") && !p.equalsIgnoreCase("white chocolate")){
@@ -191,6 +109,8 @@ public class MasterOrder {
         orders.add(o);
     }
 
+    //Void method which goes through the ArrayList of orders and then prints them onto the screen of the user
+    //using the JOP class.
     public void printOrders() {
         String orderStr = "";
         for(Order o : orders) { orderStr += o; }
@@ -198,6 +118,9 @@ public class MasterOrder {
         else{ JOP.msg("There are currently no orders"); }
     }
 
+    //Void method which takes in a parameter from the user in order to properly search through the list of the
+    //orders and successfully retrieve the orders that belong to that specific customer. The method will also
+    //return and messages warning if a certain customer doesn't have anything ordered under their name.
     public void printOrders(String buyer) {
         String orderStr = "";
         for(Order o : orders) {
@@ -209,6 +132,8 @@ public class MasterOrder {
         else{ JOP.msg("There are currently no orders."); }
     }
 
+    //Void method which manipulates the list of orders in order to remove any plates that match with the name
+    //that the user has specified to remove.
     public void clearAllProducts() {
         String product = JOP.in("Enter the name of the product you wish to clear");
         for(int i = 0; i < orders.size(); i++) {
@@ -218,7 +143,6 @@ public class MasterOrder {
             }
         }
     }
-*/
 
 -----------------------------------------------------------------------------------------------------------
 
@@ -226,8 +150,16 @@ package mod;
 
 import java.util.ArrayList;
 
+/*
+ *The class Menu is created in order to create the view of the menu layout and and the objects that will be
+ *needed so that the menu could be created with all the available plates. The class also helps retrieve and
+ *add more orders onto the list in the menu
+ */
 public class Menu {
 	
+	        //Instance variable that create an object for the Orders class in order to make it easier to
+		//access the methods within the Order class. These instance variables also establish the main
+		//components of the menu and where the different plates will be stored.
 		private Order _f;
 		private String _curMenuOutline = "________________________________________________________________"
 								   + "\n |                                                                |"
@@ -257,78 +189,68 @@ public class Menu {
 		
 		private ArrayList<String> hey;
 		
+		//Constructor for the Menu class which initializes the object made for the Order class so that
+		//it could receive the correct information in order to construct the correct order for the user.
+		//The constructor also initializes the String ArrayList which will hold the orders placed by the
+		//customer.
 		public Menu() {
 			_f = new Order(_f.getProduct());
 			hey = new ArrayList<String>();
 		}
+		
+		//Getter String method which will retrieve the visual layout of the menu as a String.
 		public String getMenuOutline() { return _curMenuOutline; }
+		
+		//Getter String method which will retrieve the items that will be included within the menu of the 
+		//restaurant and returns them as a String.
 		public String getMenu() { return _menu; }
+		
+		//Getter String method which will return all of the information on the menu as a String.
 		public String toString() { return _menu; }
-		public String addOrder() { hey.add(_food)
+		
+		//Void method which manipulates the list of orders in order to add more objects onto the list of
+		//orders placed by the user.
+		public void addOrder() { hey.add(_food) }
 }
 
 -----------------------------------------------------------------------------------------------------------
 
 package mod;
 
+/*
+ *The class Order is made in order to help manipulate and create the information that will be included on
+ *list of orders that will be created by the user. It takes in input from hte used in order to create objects
+ *that contain information such as the food ordered or the name of the customer.
+ */
 public class Order {
+
+    //Instance variables which will hold the information about the food which the user orders, the name of the
+    //customer himself/herself, and the amount that each plate costs
     private String _food;
     private String _customer;
     private int _amount;
 
+    //Constructor for the Order class which initializes the values of the all the instance variables with the
+    //values inputted by the user.
     public Order(String s, String c, int a) {
         _food = s;
         _customer = c;
         _amount = a;
     }
 
+    //Getter String method which returns a String containing the specific product that the user wishes to view.
     public String getProduct() { return _food; }
+    
+    //Getter String method which will retrieve and return the name of the customer that the user wishes to view.
     public String getBuyer() { return _customer; }
+    
+    //Getter int method which will return and int values which indicates the price of a specific order.
     public int getAmount() { return _amount; }
 
-    //public void setProduct(String p) { product = p; }
-    //public void setBuyer(String b) { buyer = b; }
-    //public void setAmount(int a) { amount = a; }
-    
+    //String method which will use the JOP class in order to turn all the information inputted by the user into
+    //an eligible phrase that contains all the important information about the order, including the name, the
+    price, and the food that was ordered.
     public String toString(){
         return "" + _customer + " ordered " + _amount + " of " + _food;
     }
-}
-
------------------------------------------------------------------------------------------------------------
-
-package view;
-
-public class Menu {
-		private String _curMenuOutline = "________________________________________________________________"
-							+ "\n |                                                                |"
-							+ "\n |                                                                |"
-							+ "\n |                                                                |"
-							+ "\n |                                                                |"
-							+ "\n |                                                                |"
-							+ "\n |                                                                |"
-							+ "\n |                                                                |"
-							+ "\n |                                                                |"
-							+ "\n |                                                                |"
-							+ "\n |                                                                |"
-							+ "\n |                                                                |"
-							+ "\n |                                                                |"
-							+ "\n |                                                                |"
-							+ "\n |                                                                |"
-							+ "\n |                                                                |"
-							+ "\n |                                                                |"
-							+ "\n |                                                                |"
-							+ "\n |                                                                |"
-							+ "\n |                                                                |"
-							+ "\n |________________________________________________________________|";
-		
-		private String _menu = "Bandeja Paisa - $25.00"
-							 + "\nSancocho - $15.00"
-							 + "\nLechona - $13.00";
-		
-		public String getMenuOutline() { return _curMenuOutline; }
-		public String getMenu() { return _menu; }
-		public String toString() {
-			return _menu;
-		}
 }
