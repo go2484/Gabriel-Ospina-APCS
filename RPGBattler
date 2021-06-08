@@ -1,0 +1,319 @@
+package cont;
+
+import javax.swing.JOptionPane;
+
+/*
+ *The JOptionPane class is made in order for the user to recieve and input commands
+ *into text boxes that appear on the computer screen. The class functions in order
+ to display messages and take in input from the user.
+ */
+public class JOP {
+
+  //Method made in order to display messages to the user.
+  //Does NOT take in input from the user.
+	public static void msg(String msg) {
+		JOptionPane.showMessageDialog(null, msg);
+	}
+	
+  //String method which displays a message to the user, as
+  //well as take in a String input from the user and later
+  //return it.
+	public static String in(String msg){
+		return JOptionPane.showInputDialog(msg);
+	}
+}
+
+-----------------------------------------------------------------------------------------------------------
+
+package mod;
+
+import java.util.Random;
+
+public class AI {
+
+	private int _rCScore;
+	private int _hCScore;
+	private int computerNum; //0 is rock, 1 is paper, 2 is scissors
+	private String guess = "";
+	Random random = new Random();
+	
+	public void computerGuess(){
+    	
+        computerNum = random.nextInt(2);
+        
+        if(computerNum == 0) {
+        	guess = "rock";
+        }
+        else if(computerNum == 1) {
+        	guess = "paper";
+        }
+        else {
+        	guess = "scissors";
+        }
+    }
+	
+    public String getCGuess(){ return guess; }
+
+    public int getCRoundScore() { return _rCScore; }
+    public int getCHighScore() { return _hCScore; }
+    public void incrementCScore() { _rCScore++; }
+    public void incrementCHighScore() { _hCScore++; }
+    public void resetCRoundScore() { _rCScore = 0; }
+    public void resetCHighScore() { _hCScore = 0; }
+}
+
+-----------------------------------------------------------------------------------------------------------
+
+package mod;
+
+import cont.JOP;
+
+public class Game {
+	
+	boolean _play = true;
+	boolean _isPlaying = true;
+	String _input = "";
+	Player Player1 = new Player();
+	Player Player2 = new Player();
+	AI _AI = new AI();
+
+	public Game(){
+		JOP.msg("Hey!! Welcome to my game of rock, paper, scissors!"
+				+ "\nDon't worry Rico (or grader), I know you don't even wanna look at this,"
+				+ "\nbut luckily for you I've made this game so it's simple and easy to play,"
+				+ "\nand you could even leave the game any time you so desire."
+				+ "\nTo play, just follow the simple instuctions and everything should work just fine.");
+		while(_play){
+			_isPlaying = true;
+			
+			String playerOrAI = JOP.in("Go ahead and choose either player vs player (type pvp) or player vs AI (type pva)."
+					+ "\nOr well you could also just type \"exit\" if you wish so badly to leave this piece of shi... I mean below average game."
+					+ "\n...Oh you're still reading this? Well...um...I didn't really expect you to continue."
+					+ "\nWelllll whatever I guess you could sit around here and wait and contemplate life"
+					+ "\norrr you could look at the highscores by typing \"highscores\""
+					+ "\nor, crazy idea, maybe even try playing the game by typing in your input. You do you.");
+			
+			if(playerOrAI.equalsIgnoreCase("highscores")) {
+				viewHighscores();
+			}
+			else if(playerOrAI.equalsIgnoreCase("exit")) {
+				System.exit(0);
+			}
+			else {
+				if(playerOrAI.equalsIgnoreCase("pvp")){
+		    		playerVsPlayer();
+		        } 
+		    	else if(playerOrAI.equalsIgnoreCase("pva")){
+		    		playerVsComputer();
+		        } 
+		    	else {
+		    		JOP.msg("Bro I'm begging you please just pick a valid input"
+		    				+ "\nheck you can even type exit for all I care"
+		    				+ "\nJUST PICK SOMETHING THAT ACTUALLY WORKS");
+		        }
+			}
+		}
+	}
+	
+	public void viewHighscores() {
+		JOP.msg("Highscores:"
+				+ "\nPlayer one: " + Player1.getHighScore()
+				+ "\nPlayer two: " + Player2.getHighScoreP2()
+				+ "\nAI: " + _AI.getCHighScore());
+	}
+	
+	public void playerVsPlayer(){
+		JOP.msg("Ah! I see you've selected player vs player. Good pick!");
+        while(_isPlaying){
+            JOP.msg("The current score is " + Player1.getRoundScore() + " for player one, and " + Player2.getRoundScore() + " for player two.");
+            JOP.msg("Player one you're up, look away player two! Don't be a peeping Tom!");
+            Player1.inputGuess();
+            JOP.msg("Alright you can look now player two! Please do me a favor and type in your pick.");
+            Player2.inputGuess();
+            getWinnerPVP();
+        }
+    }
+    public void playerVsComputer(){
+    	JOP.msg("Going against the AI I see! You better not let it beat you!");
+        while(_isPlaying){
+            JOP.msg("The current score is " + Player1.getRoundScore() + " for player one, and " + _AI.getCRoundScore() + " for the AI.");
+            JOP.msg("Rise and shine player one! You're up!");
+            Player1.inputGuess();
+            JOP.msg("It's the AI's turn, watch out!");
+            _AI.computerGuess();
+            getWinnerPVC();
+        }
+    }
+	
+	
+	
+    public void getWinnerPVP(){
+    	/*if(!Player1.getPGuess().equalsIgnoreCase("rock") || !Player1.getPGuess().equalsIgnoreCase("paper") || !Player1.getPGuess().equalsIgnoreCase("scissors")) {
+    		JOP.msg("HOLY MOLY WHY CANT PEOPLE THESE DAYS FOLLOW SIMPLE DIRECTIONS"
+    				+ "\nPLEASE ENTER A VALID INPUT"
+    				+ "\nEITHER ROCK, PAPER, OR SCISSORS");
+    	}*/
+        if(Player1.getPGuess().equalsIgnoreCase("rock") && Player2.getPGuess().equalsIgnoreCase("paper")){
+            Player2.incrementScore();
+            JOP.msg("Player one, you guessed " + Player1.getPGuess() + " ,and player two you guessed " + Player2.getPGuess() + ". Lucky player two takes this round!");
+        } else if(Player1.getPGuess().equalsIgnoreCase("paper") && Player2.getPGuess().equalsIgnoreCase("scissors")){
+            Player2.incrementScore();
+            JOP.msg("Player one, you guessed " + Player1.getPGuess() + " ,and player two you guessed " + Player2.getPGuess() + ". Player two Snatches this round!");
+        } else if(Player1.getPGuess().equalsIgnoreCase("scissors") && Player2.getPGuess().equalsIgnoreCase("rock")){
+            Player2.incrementScore();
+            JOP.msg("Player one, you guessed " + Player1.getPGuess() + " ,and player two you guessed " + Player2.getPGuess() + ". OOOO Looks like player two wins this round!");
+        } else if(Player1.getPGuess().equalsIgnoreCase("paper") && Player2.getPGuess().equalsIgnoreCase("rock")){
+            Player1.incrementScore();
+            JOP.msg("Player one, you guessed " + Player1.getPGuess() + " ,and player two you guessed " + Player2.getPGuess() + ". Player one dominates this round!");
+        } else if(Player1.getPGuess().equalsIgnoreCase("scissors") && Player2.getPGuess().equalsIgnoreCase("paper")){
+            Player1.incrementScore();
+            JOP.msg("Player one, you guessed " + Player1.getPGuess() + " ,and player two you guessed " + Player2.getPGuess() + ". ANDDD Player one rules the round!");
+        } else if(Player1.getPGuess().equalsIgnoreCase("rock") && Player2.getPGuess().equalsIgnoreCase("scissors")){
+            Player1.incrementScore();
+            JOP.msg("Player one, you guessed " + Player1.getPGuess() + " ,and player two you guessed " + Player2.getPGuess() + ". Player one destroys the opponent and wins the round!");
+        } else{
+            JOP.msg("It's... a tie?!?! Wow what are the odds! Well lets go again!");
+        }
+        if(Player1.getRoundScore() >= 2){
+            Player2.resetHighScoreP2();
+            Player2.resetRoundScoreP2();
+            Player1.resetRoundScore();
+            Player1.incrementHighScore();
+            JOP.msg("Player one wins the game!"
+            		+ "\nTake that player two!");
+            _isPlaying = false;
+        }
+        if(Player2.getRoundScore() >= 2){
+            Player1.resetHighScore();
+            Player1.resetRoundScore();
+            Player2.resetRoundScore();
+            Player2.incrementHighScoreP2();
+            JOP.msg("Player two wins the game!"
+            		+ "\nHow you like them apples player one!");
+            _isPlaying = false;
+        }
+    }
+    
+    public void getWinnerPVC(){
+    	/*if(!Player1.getPGuess().equalsIgnoreCase("rock") && !Player1.getPGuess().equalsIgnoreCase("paper") && !Player1.getPGuess().equalsIgnoreCase("scissors")) {
+    		JOP.msg("I LITERALLY ASKED YOU TO FOLLOW SIMPLE DIRECTIONS"
+    				+ "\nPLEASE ENTER A VALID INPUT THIS TIME");
+    	}*/
+        if(Player1.getPGuess().equalsIgnoreCase("rock") && _AI.getCGuess().equalsIgnoreCase("paper")){
+            _AI.incrementCScore();
+            JOP.msg("Player one, you guessed " + Player1.getPGuess() + " ,and the AI guessed " + _AI.getCGuess() + ". The AI wins this round!");
+        } else if(Player1.getPGuess().equalsIgnoreCase("paper") && _AI.getCGuess().equalsIgnoreCase("scissors")){
+            _AI.incrementCScore();
+            JOP.msg("Player one, you guessed " + Player1.getPGuess() + " ,and the AI guessed " + _AI.getCGuess() + ". The AI takes the round!" + "\nHow are you losing to this??");
+        } else if(Player1.getPGuess().equalsIgnoreCase("scissors") && _AI.getCGuess().equalsIgnoreCase("rock")){
+            _AI.incrementCScore();
+            JOP.msg("Player one, you guessed " + Player1.getPGuess() + " ,and the AI guessed " + _AI.getCGuess() + ". The AI wins the round!" + "\nDid you really just let this piece of garbage beat you??");
+        } else if(Player1.getPGuess().equalsIgnoreCase("paper") && _AI.getCGuess().equalsIgnoreCase("rock")){
+            Player1.incrementScore();
+            JOP.msg("Player one, you guessed " + Player1.getPGuess() + " ,and the AI guessed " + _AI.getCGuess() + ". The human takes the round!");
+        } else if(Player1.getPGuess().equalsIgnoreCase("scissors") && _AI.getCGuess().equalsIgnoreCase("paper")){
+            Player1.incrementScore();
+            JOP.msg("Player one, you guessed " + Player1.getPGuess() + " ,and the AI guessed " + _AI.getCGuess() + ". Player one demolishes the AI and yoinks the round!");
+        } else if(Player1.getPGuess().equalsIgnoreCase("rock") && _AI.getCGuess().equalsIgnoreCase("scissors")){
+            Player1.incrementScore();
+            JOP.msg("Player one, you guessed " + Player1.getPGuess() + " ,and the AI guessed " + _AI.getCGuess() + ". Player one fries the AI and wins the round!");
+        } else{
+            JOP.msg("It's a tie! On to the next round.");
+        }
+        if(_AI.getCRoundScore() >= 2){
+            Player1.resetHighScore();
+            Player1.resetRoundScore();
+            _AI.resetCRoundScore();
+            _AI.incrementCHighScore();
+            JOP.msg("Computer wins the game!"
+            		+ "\nWow you got demolished by a hunk of metal!"
+            		+ "\nWhat a loser!!");
+            _isPlaying = false;
+        }
+        if(Player1.getRoundScore() >= 2){
+            _AI.resetCHighScore();
+            _AI.resetCRoundScore();
+            Player1.resetRoundScore();
+            Player1.incrementHighScore();
+            JOP.msg("Player one wins the game and comes out victorious!"
+            		+ "\nWe ain't letting no AI beat us WOOO!");
+            _isPlaying = false;
+        }
+    }
+}
+
+-----------------------------------------------------------------------------------------------------------
+
+package mod;
+
+/*
+ *Main class made in order to execute the user's code
+ */
+public class Main {
+
+  //Void method which creates a new Game type variable
+  //named obj.
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Game obj = new Game();
+	}
+}
+
+-----------------------------------------------------------------------------------------------------------
+
+package mod;
+
+import cont.JOP;
+
+public class Player {
+	
+    private String _pGuess = "";
+    private int _rScore;
+    private int _hScore;
+    private int _rScoreP2;
+    private int _hScoreP2;
+    
+    public Player() {
+    	_rScore = 0;
+    	_hScore = 0;
+    	_rScoreP2 = 0;
+    	_hScoreP2 = 0;
+    }
+    
+    public void inputGuess(){
+    	
+        boolean valid = false; //Variable that becomes true if the string input is correct
+        //_pGuess = JOP.in("Pick rock, paper or scissors.");
+        
+        
+        while(!valid) {
+        	_pGuess = JOP.in("Select rock, paper or scissors (or exit if you wish to leave).");
+        	if(_pGuess.equalsIgnoreCase("exit")) {
+        		System.exit(0);
+        	}
+        	else if (!_pGuess.equalsIgnoreCase("rock") && !_pGuess.equalsIgnoreCase("paper") && !_pGuess.equalsIgnoreCase("scissors")) {
+                JOP.msg("bro... how'd you mess something so simple."
+                		+ "\nyou had the option between rock, paper, or scissors."
+                		+ "\nImma just go ahead an give you another try."
+                		+ "\nAND DONT MESS IT UP THIS TIME");
+            }
+            else {
+                valid = true;
+            }
+        }
+    }
+    
+    public String getPGuess() { return _pGuess; }
+    public int getRoundScore() { return _rScore; }
+    public int getHighScore() { return _hScore; }
+    public int getRoundScoreP2() { return _rScoreP2; }
+    public int getHighScoreP2() { return _hScoreP2; }
+    public void incrementScore() { _rScore++; }
+    public void incrementScoreP2() { _rScoreP2++; }
+    public void incrementHighScore() { _hScore++; }
+    public void incrementHighScoreP2() { _hScoreP2++; }
+    public void resetRoundScore() { _rScore = 0; }
+    public void resetHighScore() { _hScore = 0; }
+    public void resetRoundScoreP2() { _rScoreP2 = 0; }
+    public void resetHighScoreP2() { _hScoreP2 = 0; }
+}
