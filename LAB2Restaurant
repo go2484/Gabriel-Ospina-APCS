@@ -1,0 +1,334 @@
+package cont;
+
+import javax.swing.JOptionPane;
+
+/*
+ *The JOptionPane class is made in order for the user to recieve and input commands
+ *into text boxes that appear on the computer screen. The class functions in order
+ to display messages and take in input from the user.
+ */
+public class JOP {
+
+  //Method made in order to display messages to the user.
+  //Does NOT take in input from the user.
+	public static void msg(String msg) {
+		JOptionPane.showMessageDialog(null, msg);
+	}
+	
+  //String method which displays a message to the user, as
+  //well as take in a String input from the user and later
+  //return it.
+	public static String in(String msg){
+		return JOptionPane.showInputDialog(msg);
+	}
+}
+
+-----------------------------------------------------------------------------------------------------------
+
+package mod;
+
+/*
+ *Main class made in order to execute the user's code
+ */
+public class Main {
+
+  //Void method which creates a new MasterOrder type variable
+  //named obj.
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		MasterOrder obj = new MasterOrder();
+	}
+}
+
+-----------------------------------------------------------------------------------------------------------
+
+package mod;
+
+import java.util.ArrayList;
+import cont.JOP;
+
+public class MasterOrder {
+	private ArrayList<Order> _orders = new ArrayList<Order>();
+	private Menu _m;
+	
+	public MasterOrder() {
+		update();
+	}
+	
+	public void update() {
+		boolean isOrdering = true;
+		JOP.msg("Welcome to the Colombian Quisine! Home of all the finest dishes from Colombia!");
+		JOP.msg("We're ruuning a bit low on some supplies though so our menu looks a little... short"
+				+ "\n  but don't worry, I promise our menu still comes with our specialty dishes");
+		JOP.in("");
+		
+		while(isOrdering) {
+			boolean open = true;
+			String menu = _m.toString();
+			String msg = "What would you like to order?";
+			
+			while(open){				
+				String order = JOP.in(menu + msg);
+				
+				if(order == null) {
+					
+				}
+				else if(getOrder(order)) {
+					open = false;
+				}
+				
+			}
+		}
+	}
+	
+	private boolean getOrder(String s) {
+		
+		if(s.equalsIgnoreCase("bandeja paisa")) {
+			_orders.add(s);
+			return true;
+		}
+		else if(s.equalsIgnoreCase("sancocho")) {
+			_orders.add(s);
+			return true;
+		}
+		else if(s.equalsIgnoreCase("lechona")) {
+			_orders.add(s);
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+}
+
+/*
+private boolean getPlayerMove(String s) {
+
+	// Moving North
+	if (s.equalsIgnoreCase("W")) {
+		if ((_p.getRow() - 1) >= 0 && _m.getMaze()[_p.getRow() - 1][_p.getCol()]) {
+			_p.setPos(_p.getRow() - 1, _p.getCol());
+			return true;
+		} else {
+			return false;
+		}
+	}
+	// Moving South
+	if (s.equalsIgnoreCase("S")) {
+		if ((_p.getRow() + 1) < _m.getMaze().length && _m.getMaze()[_p.getRow() + 1][_p.getCol()]) {
+			_p.setPos(_p.getRow() + 1, _p.getCol());
+			return true;
+		} else {
+			return false;
+		}
+	}
+	// Moving East
+	if (s.equalsIgnoreCase("D")) {
+		if ((_p.getCol() + 1) < _m.getMaze()[0].length && _m.getMaze()[_p.getRow()][_p.getCol() + 1]) {
+			_p.setPos(_p.getRow(), _p.getCol() + 1);
+			return true;
+		} else {
+			return false;
+		}
+	}
+	// Moving West
+	if (s.equalsIgnoreCase("A")) {
+		if ((_p.getCol() - 1) >= 0 && _m.getMaze()[_p.getRow()][_p.getCol() - 1]) {
+			_p.setPos(_p.getRow(), _p.getCol() - 1);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	return false;
+}
+
+
+
+public class MasterOrder {
+    private ArrayList<Order> orders;
+    boolean running = true;
+    public MasterOrder() {
+        orders = new ArrayList<Order>();
+        this.update();
+    }
+    public void update(){
+        while(running) {
+            String usrInput = JOP.in("Welcome to the ordering program! \n Type order to start ordering \n Type print to print the orders \n Type remove to remove an order \n Type clear to clear parts of the order list \n Type total orders to display the number of each product being ordered \n Type quit to exit the program");
+            if (usrInput.equalsIgnoreCase("order")) {
+                try { this.addOrder(); }
+                catch (Exception O) { JOP.msg("Not a valid response."); }
+            } else if (usrInput.equalsIgnoreCase("print")) {
+                String printType = JOP.in("Enter a buyer to print orders from them, or leave it blank to print all orders.");
+                if (printType.equals("")) { this.printOrders(); }
+                else { this.printOrders(printType); }
+            } else if (usrInput.equalsIgnoreCase("remove")) {
+                try { this.remove(); }
+                catch (Exception P) { JOP.msg("Not a valid response"); }
+            } else if (usrInput.equalsIgnoreCase("clear")) {
+                String removeType = JOP.in("Type buyer to remove orders by buyer \n Type product to remove orders by product");
+                if (removeType.equalsIgnoreCase("buyer")) {
+                    this.clearAllBuyers();
+                } else if (removeType.equalsIgnoreCase("product")) {
+                    try { this.clearAllProducts(); }
+                    catch (Exception Q) { JOP.msg("Not a valid response");}
+                }
+            } else if(usrInput.equalsIgnoreCase("total orders")) {
+                outputAmtToFulfillAll();
+            } else if (usrInput.equalsIgnoreCase("quit")) { running = false; }
+        }
+    }
+
+    public void addOrder() {
+        String p = JOP.in("Enter in the name of the product you want. Your options are: White chocolate, milk chocolate and dark chocolate.");
+        if(!p.equalsIgnoreCase("milk chocolate") && !p.equalsIgnoreCase("dark chocolate") && !p.equalsIgnoreCase("white chocolate")){
+            throw new NullPointerException("We don't have that.");
+        }
+        String b = JOP.in("Enter the name your name. You will be identified by this.");
+        int a = Integer.parseInt(JOP.in("How many of the order do you want? Enter a number."));
+        Order o = new Order(p.toLowerCase(), b, a);
+        orders.add(o);
+    }
+
+    public void printOrders() {
+        String orderStr = "";
+        for(Order o : orders) { orderStr += o; }
+        if(!orderStr.equals("")){ JOP.msg(orderStr); }
+        else{ JOP.msg("There are currently no orders"); }
+    }
+
+    public void printOrders(String buyer) {
+        String orderStr = "";
+        for(Order o : orders) {
+            if(o.getBuyer().equals(buyer)) {
+                orderStr += o;
+            }
+        }
+        if(!orderStr.equals("")) { JOP.msg(orderStr); }
+        else{ JOP.msg("There are currently no orders."); }
+    }
+
+    public void clearAllProducts() {
+        String product = JOP.in("Enter the name of the product you wish to clear");
+        for(int i = 0; i < orders.size(); i++) {
+            if(orders.get(i).getProduct().equals(product)) {
+                orders.remove(i);
+                i--;
+            }
+        }
+    }
+*/
+
+-----------------------------------------------------------------------------------------------------------
+
+package mod;
+
+import java.util.ArrayList;
+
+public class Menu {
+	
+		private Order _f;
+		private String _curMenuOutline = "________________________________________________________________"
+								   + "\n |                                                                |"
+								   + "\n |                                                                |"
+								   + "\n |                                                                |"
+								   + "\n |                                                                |"
+								   + "\n |                                                                |"
+								   + "\n |                                                                |"
+								   + "\n |                                                                |"
+								   + "\n |                                                                |"
+								   + "\n |                                                                |"
+								   + "\n |                                                                |"
+								   + "\n |                                                                |"
+								   + "\n |                                                                |"
+								   + "\n |                                                                |"
+								   + "\n |                                                                |"
+								   + "\n |                                                                |"
+								   + "\n |                                                                |"
+								   + "\n |                                                                |"
+								   + "\n |                                                                |"
+								   + "\n |                                                                |"
+								   + "\n |________________________________________________________________|";
+		
+		private String _menu = "Bandeja Paisa - $25.00"
+							 + "\nSancocho - $15.00"
+							 + "\nLechona - $13.00";
+		
+		private ArrayList<String> hey;
+		
+		public Menu() {
+			_f = new Order(_f.getProduct());
+			hey = new ArrayList<String>();
+		}
+		public String getMenuOutline() { return _curMenuOutline; }
+		public String getMenu() { return _menu; }
+		public String toString() { return _menu; }
+		public String addOrder() { hey.add(_food)
+}
+
+-----------------------------------------------------------------------------------------------------------
+
+package mod;
+
+public class Order {
+    private String _food;
+    private String _customer;
+    private int _amount;
+
+    public Order(String s, String c, int a) {
+        _food = s;
+        _customer = c;
+        _amount = a;
+    }
+
+    public String getProduct() { return _food; }
+    public String getBuyer() { return _customer; }
+    public int getAmount() { return _amount; }
+
+    //public void setProduct(String p) { product = p; }
+    //public void setBuyer(String b) { buyer = b; }
+    //public void setAmount(int a) { amount = a; }
+    
+    public String toString(){
+        return "" + _customer + " ordered " + _amount + " of " + _food;
+    }
+}
+
+-----------------------------------------------------------------------------------------------------------
+
+package view;
+
+public class Menu {
+		private String _curMenuOutline = "________________________________________________________________"
+							+ "\n |                                                                |"
+							+ "\n |                                                                |"
+							+ "\n |                                                                |"
+							+ "\n |                                                                |"
+							+ "\n |                                                                |"
+							+ "\n |                                                                |"
+							+ "\n |                                                                |"
+							+ "\n |                                                                |"
+							+ "\n |                                                                |"
+							+ "\n |                                                                |"
+							+ "\n |                                                                |"
+							+ "\n |                                                                |"
+							+ "\n |                                                                |"
+							+ "\n |                                                                |"
+							+ "\n |                                                                |"
+							+ "\n |                                                                |"
+							+ "\n |                                                                |"
+							+ "\n |                                                                |"
+							+ "\n |                                                                |"
+							+ "\n |________________________________________________________________|";
+		
+		private String _menu = "Bandeja Paisa - $25.00"
+							 + "\nSancocho - $15.00"
+							 + "\nLechona - $13.00";
+		
+		public String getMenuOutline() { return _curMenuOutline; }
+		public String getMenu() { return _menu; }
+		public String toString() {
+			return _menu;
+		}
+}
